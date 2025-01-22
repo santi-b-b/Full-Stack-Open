@@ -4,7 +4,7 @@ const Statistics = (props) => {
   console.log(props.all)
   if(props.all > 0){
     const avg = props.sum / props.all
-    const percentage = props.good / props.all
+    const percentage = 100 * props.good / props.all
     return(
       <div>
         <p>average: {avg}</p>
