@@ -2,44 +2,32 @@ import { useState } from "react"
 
 
 const App = () => {
-  const [clicks, setClicks] = useState({ //Se define una función con una variable de estado que tiene dos componentes
-    left: 0, right: 0
-  })
-
-  const handleLeftClick = () => { // Esta es la función que maneja el cambio de estado del componente left 
-    const newClicks = { //Esta sintaxis creo que es nueva, las funciones de cambio de estado usan : para asignar valor, raro... debe ser de la librería,  perdón ya lo entandí es un objeto 
-      left: clicks.left + 1,
-      right: clicks.right
+    const [left, setLeft] = useState(0) // Se setea el estado para left y su metodo set setLeft
+    const [right, setRight] = useState(0)
+  
+    const [allClicks, setAll] = useState([]) // Se setea un estado con un objeto que es un arreglo vacío
+  
+  
+    const handleLeftClick = () => { // Este manejador suma 1 a la variable left cada vez que es llamado y al arreglo allClicks le interta una 'L' de left al final
+      setAll(allClicks.concat('L'))
+      setLeft(left + 1)
     }
-    setClicks(newClicks) // se le asignan los valores del nuevo objeto a left y righ
-  }
-
-  const handleRightClick = () => { //Lo mismo que la función anterior pero para right
-    const newClicks = {
-      left: clicks.left,
-      right: clicks.right + 1
+  
+  
+    const handleRightClick = () => {
+      setAll(allClicks.concat('R'))
+      setRight(right + 1)
     }
-    setClicks(newClicks)
+  
+    return ( // me imagino que la funcion join de un arreglo une todos los elementos de este intercalando con el parámetro que recibe
+      <div>
+        {left}
+        <button onClick={handleLeftClick}>left</button>
+        <button onClick={handleRightClick}>right</button>
+        {right}
+  
+        <p>{allClicks.join(' ')}</p> 
+      </div>
+    )
   }
-
-  const interChangevalues = () => {
-    let aux = clicks.left
-    const newClicks = {
-      ...clicks,
-      left: clicks.right,
-      right: aux
-    }
-    setClicks(newClicks)
-  }
-
-  return (
-    <div>
-      {clicks.left}
-      <button onClick={handleLeftClick}>left</button>
-      <button onClick={interChangevalues}>change</button>
-      <button onClick={handleRightClick}>right</button>
-      {clicks.right}
-    </div>
-  )
-}
 export default App
