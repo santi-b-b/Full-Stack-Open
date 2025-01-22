@@ -15,7 +15,7 @@ const Statistics = (props) => {
   else{
     return (
       <div>
-        <p>Aun no hay clicks para generar estadisticas</p>
+        <p>No feedback given</p>
       </div>
     )
   }
