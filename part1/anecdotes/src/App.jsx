@@ -5,13 +5,23 @@ const Button = (props) =>{
 }
 
 const MostVoted = (props) =>{
-  const story = props.votes.indexOf(Math.max.apply(null, props.votes))
-  return(
-    <div>
-      <p>{props.anecdotes[story]}</p>
-      <p> has {props.votes[story]} votes</p>
-    </div>
-  )
+  const max = Math.max.apply(null, props.votes)
+  const story = props.votes.indexOf(max)
+  if (max > 0){
+    return(
+      <div>
+        <p>{props.anecdotes[story]}</p>
+        <p> has {props.votes[story]} votes</p>
+      </div>
+    )
+  }
+  else {
+    return(
+      <div>
+        <p>No votes yet</p>
+      </div>
+    )
+  }
 }
 
 const App = () => {
