@@ -4,6 +4,15 @@ const Button = (props) =>{
   return <button onClick={props.onClick}>{props.text}</button>
 }
 
+const MostVoted = (props) =>{
+  const story = props.votes.indexOf(Math.max.apply(null, props.votes))
+  return(
+    <div>
+      <p>{props.anecdotes[story]}</p>
+    </div>
+  )
+}
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -17,17 +26,27 @@ const App = () => {
   ]
 
   const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(new Uint8Array(anecdotes.length)) 
 
-  const handleClickSelectStory = () =>{
+  const handleClickNextAnecdote = () =>{
     const selected_aux = Math.floor(Math.random() * anecdotes.length)
     setSelected(selected_aux)
-    console.log(selected_aux)
+  }
+  const handleClickVote = () =>{
+    const aux = [...votes]
+    aux[selected] += 1
+    setVotes(aux)
   }
 
   return (
     <div>
-      <Button onClick={handleClickSelectStory} text = 'Next anecdote'/>
+
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
+      <Button onClick={handleClickNextAnecdote} text = 'Next anecdote'/>
+      <Button onClick={handleClickVote} text = 'Vote'/>
+      <h1>Anecdote with the most votes</h1>
+      <MostVoted anecdotes = {anecdotes} votes = {votes}/>
     </div>
   )
 }
