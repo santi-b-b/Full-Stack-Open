@@ -9,6 +9,7 @@ const MostVoted = (props) =>{
   return(
     <div>
       <p>{props.anecdotes[story]}</p>
+      <p> has {props.votes[story]} votes</p>
     </div>
   )
 }
@@ -43,6 +44,7 @@ const App = () => {
 
       <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
       <Button onClick={handleClickNextAnecdote} text = 'Next anecdote'/>
       <Button onClick={handleClickVote} text = 'Vote'/>
       <h1>Anecdote with the most votes</h1>
