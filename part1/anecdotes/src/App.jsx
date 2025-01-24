@@ -4,9 +4,10 @@ const Button = (props) =>{
   return <button onClick={props.onClick}>{props.text}</button>
 }
 
+//This function manages the calculation of the most voted story and the component that displays it 
 const MostVoted = (props) =>{
-  const max = Math.max.apply(null, props.votes)
-  const story = props.votes.indexOf(max)
+  const max = Math.max.apply(null, props.votes) // Storing the highest votes value
+  const story = props.votes.indexOf(max) // Getting the index of the first element of the array that is equal tto the maximum
   if (max > 0){
     return(
       <div>
@@ -39,8 +40,11 @@ const App = () => {
   const [selected, setSelected] = useState(0)
   const [votes, setVotes] = useState(new Uint8Array(anecdotes.length)) 
 
+
   const handleClickNextAnecdote = () =>{
-    const selected_aux = Math.floor(Math.random() * anecdotes.length)
+    // Here the random nextt anecdote is chosen 
+    // Random delivers a number between 0-1 then when multipled by the lenght of the array turn into a number between 0-arrya´s lencth and finnaly with the floor function it becomes and integer and ensures that is not going to get out of bounds.
+    const selected_aux = Math.floor(Math.random() * anecdotes.length) 
     setSelected(selected_aux)
   }
   const handleClickVote = () =>{
