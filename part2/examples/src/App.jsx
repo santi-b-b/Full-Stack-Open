@@ -1,48 +1,77 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Note from './components/Note'
+import axios from 'axios'
 
 
-const App = (props) => { 
+const App = () => {
+
+  const [notes, setNotes] = useState([])
+  const [newNote, setNewNote] = useState('a new note...')
+  const [showAll, setShowAll] = useState(true)
+  console.log(notes)
+
+
+  const hook = () => {
+    console.log('effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(response => {
+        console.log('promise fulfilled')
+        setNotes(response.data)
+      })
+  }
   
-  const [notes, SetNotes] = useState(props.notes)
-  const [newNote, setNewNote] = useState(
-    'a new note...'
-  ) 
+  useEffect(hook, [])
+
+  console.log('render', notes.length, 'notes')
 
   const addNote = (event) => {
     event.preventDefault()
     const noteObject = {
       content: newNote,
       important: Math.random() < 0.5,
-      id: notes.lenght + 1,
+      id: notes.length + 1,
     }
 
-    SetNotes(notes.concat(noteObject))
-    setNewNote('')
+    setNotes(notes.concat(noteObject))
+    setNewNote('a new note...')
   }
+
 
   const handleNoteChange = (event) => {
     console.log(event.target.value)
     setNewNote(event.target.value)
   }
 
+  const handleNoteClick = (event) => {
+    setNewNote('')
+  }
+
+  const notesToShow = showAll
+  ? notes
+  : notes.filter(note => note.important === true)
+
   return (
     <div>
       <h1>Notes</h1>
+      <div> 
+        <button onClick={() => setShowAll(!showAll)}>
+          show {showAll ? 'important' : 'all'}
+      </button>
+      </div>
       <ul>
-        {notes.map(note => 
-
+        {notesToShow.map(note => 
           <Note key = {note.id} note = {note}/>
-
         )}
       </ul>
       <form onSubmit={addNote}>
-        <input  
+        <input 
           value = {newNote}
           onChange={handleNoteChange}
+          onClick={handleNoteClick}
         />
-        <button type="submit">save</button>
-      </form> 
+        <button type = "submit">save</button>
+      </form>
     </div>
   )
 }
