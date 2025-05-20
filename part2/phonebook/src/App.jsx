@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
-import PersonDetails from './components/PersonDetails'
 import PeopleList from './components/PeopleList'
+import personService from './services/persons'
 import axios from 'axios'
 
 const App = () => {
@@ -11,36 +11,25 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
-
-
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
-      })
-  }
   
-  useEffect(hook, [])
-
-  console.log(persons)
+  useEffect(() => {
+      personService
+        .getAll()
+        .then(initialPersons => {
+          setPersons(initialPersons)
+        })
+    }, [])
 
 
   const handleNameChange = (event) => {
-
-    console.log(event.target.value)
     setNewName(event.target.value)
   }
 
   const handleNumberChange = (event) => {
-    console.log(event.target.value)
     setNewNumber(event.target.value)
   }
 
   const handleFilterChange = (event) => {
-    console.log(event.target.value)
     setFilter(event.target.value)
 
     if (filter === ''){
@@ -64,17 +53,22 @@ const App = () => {
     else if (persons.some(person => person.number === newNumber)){
       window.alert(`${newNumber} is already added to phonebook`)
     }
-    else if (person => person.name === '' || person.number === ''){
+    else if (newName === '' || newNumber === ''){
       window.alert('Name and number must be filled')
+      console.log(`name: ${newName} number: ${newNumber}`)
     }
     else {
       const personObject = {
         name: newName,
         number: newNumber,
-        id: persons.length,
       }
+      personService
+            .create(personObject)
+            .then(returnedPerson => {
+              setPersons(persons.concat(returnedPerson))
+            })
       console.log(personObject)
-      setPersons(persons.concat(personObject))
+      
     }
   }
 
@@ -83,9 +77,8 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter onChange={handleFilterChange}/>
       <h2>add a new</h2>
-      <AddPersonForm onChange={handleNameChange} onSubmit={addPerson}/>
-      <PeopleList personsToShow={personsToShow} />
-      <div>debug: {newName}</div>
+      <AddPersonForm onNameChange={handleNameChange} onNumberChange={handleNumberChange} onSubmit={addPerson}/>
+      <PeopleList personsToShow={personsToShow} handleDeletePerson = {handleDeletePerson}/>
     </div>
     
   )

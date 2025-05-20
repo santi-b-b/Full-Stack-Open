@@ -11,17 +11,6 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
   console.log(notes)
 
-
-  const hook = () => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/notes')
-      .then(response => {
-        console.log('promise fulfilled')
-        setNotes(response.data)
-      })
-  }
-  
   useEffect(() => {
     noteService
       .getAll()
@@ -83,7 +72,7 @@ const App = () => {
     <div>
       <h1>Notes</h1>
       <div> 
-        <button onClick={() => setShowAll(!showAll)}>
+      <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
       </button>
       </div>
