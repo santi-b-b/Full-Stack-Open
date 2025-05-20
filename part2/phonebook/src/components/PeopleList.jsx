@@ -6,7 +6,13 @@ const PeopleList = ({personsToShow, handleDeletePerson}) => {
             <h2>Numbers</h2>
             <ul>
                 {personsToShow.map(person => 
-                    <PersonDetails key={person.id} name={person.name} number={person.number} handleDeletePerson = {handleDeletePerson} />
+                    <PersonDetails 
+                        key={person.id} 
+                        id ={person.id} 
+                        name={person.name} 
+                        number={person.number} 
+                        handleDeletePerson = {handleDeletePerson} 
+                    />
                 )}
             </ul>
         </div>

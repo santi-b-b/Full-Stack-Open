@@ -40,6 +40,18 @@ const App = () => {
     }
   }
 
+  const handleDeletePerson = (id) => {
+  const personToDelete = persons.find(p => p.id === id)
+  if (window.confirm(`Do you really want remove ${personToDelete.name} from the phonebook?`)) {
+    personService
+    .remove(id)
+    .then(personDeleted => {
+    setPersons(persons.filter(person => person.id !== personDeleted.id))
+    })
+  }
+    
+  }
+
   const personsToShow = showAll
   ? persons
   : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -66,8 +78,9 @@ const App = () => {
             .create(personObject)
             .then(returnedPerson => {
               setPersons(persons.concat(returnedPerson))
-            })
-      console.log(personObject)
+              setNewName("")
+              setNewNumber("")
+            }) 
       
     }
   }
@@ -77,7 +90,13 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter onChange={handleFilterChange}/>
       <h2>add a new</h2>
-      <AddPersonForm onNameChange={handleNameChange} onNumberChange={handleNumberChange} onSubmit={addPerson}/>
+      <AddPersonForm 
+        onNameChange={handleNameChange} 
+        onNumberChange={handleNumberChange} 
+        onSubmit={addPerson} 
+        nameValue={newName}
+        numberValue={newNumber}
+      />
       <PeopleList personsToShow={personsToShow} handleDeletePerson = {handleDeletePerson}/>
     </div>
     
