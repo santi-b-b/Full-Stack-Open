@@ -3,7 +3,8 @@ import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
 import PeopleList from './components/PeopleList'
 import personService from './services/persons'
-import axios from 'axios'
+import Notification from './components/Notification'
+import './index.css'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -11,6 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [notificationMessage, setNotificationMessage] = useState(null)
   const personsToShow = showAll
   ? persons
   : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -45,15 +47,17 @@ const App = () => {
   }
 
   const handleDeletePerson = (id) => {
-  const personToDelete = persons.find(p => p.id === id)
-  if (window.confirm(`Do you really want remove ${personToDelete.name} from the phonebook?`)) {
-    personService
-    .remove(id)
-    .then(personDeleted => {
-    setPersons(persons.filter(person => person.id !== personDeleted.id))
-    })
-  }
-    
+
+    const personToDelete = persons.find(p => p.id === id)
+
+    if (window.confirm(`Do you really want remove ${personToDelete.name} from the phonebook?`)) {
+      personService
+      .remove(id)
+      .then(personDeleted => {
+      setPersons(persons.filter(person => person.id !== personDeleted.id))
+      })
+    }
+  
   }
 
   const addPerson = (event) => {
@@ -70,8 +74,15 @@ const App = () => {
         personService
         .update(personToUpdate.id, personToUpdate)
         .then(setPersons(persons.map(person =>person.id === personToUpdate.id ? personToUpdate : person)))
-        
-  }
+
+        setNotificationMessage(
+          `${personToUpdate.name}'s number was updated`
+        )
+        setTimeout(() => {
+          setNotificationMessage(null)
+        }, 5000)
+
+      }
 
     }
     else if (persons.some(person => person.number === newNumber)){
@@ -89,10 +100,16 @@ const App = () => {
       personService
             .create(personObject)
             .then(returnedPerson => {
+
               setPersons(persons.concat(returnedPerson))
-              setNewName("")
+              setNotificationMessage(`${newName} was added to the phonebook :)`)
               setNewNumber("")
-            }) 
+              setNewName("")
+              setTimeout(() => {
+                setNotificationMessage(null)
+              }, 5000)
+              
+            })            
       
     }
   }
@@ -100,6 +117,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
       <Filter onChange={handleFilterChange}/>
       <h2>add a new</h2>
       <AddPersonForm 
