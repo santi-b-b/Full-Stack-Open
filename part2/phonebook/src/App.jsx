@@ -13,6 +13,7 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [notificationMessage, setNotificationMessage] = useState(null)
+  const [success, setSuccess] = useState(true)
   const personsToShow = showAll
   ? persons
   : persons.filter(person => person.name.toLowerCase().includes(filter.toLowerCase()))
@@ -70,19 +71,27 @@ const App = () => {
       
 
       if (window.confirm(`${personToUpdate.name} is already on the phonebook, do you want to replace the old number with this one?`)) {
-
         personService
         .update(personToUpdate.id, personToUpdate)
-        .then(setPersons(persons.map(person =>person.id === personToUpdate.id ? personToUpdate : person)))
-
-        setNotificationMessage(
-          `${personToUpdate.name}'s number was updated`
-        )
-        setTimeout(() => {
+        .then(() => {
+          setPersons(persons.map(person =>
+            person.id === personToUpdate.id ? personToUpdate : person
+          ));
+          setSuccess(true)
+          setNotificationMessage(`${personToUpdate.name}'s number was updated`)
+          setTimeout(() => {
           setNotificationMessage(null)
-        }, 5000)
-
+          }, 5000)
+        })
+        .catch(() => {
+          setSuccess(false);
+          setNotificationMessage(`${personToUpdate.name} was already deleted from the database`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000);
+        });
       }
+
 
     }
     else if (persons.some(person => person.number === newNumber)){
@@ -100,8 +109,8 @@ const App = () => {
       personService
             .create(personObject)
             .then(returnedPerson => {
-
               setPersons(persons.concat(returnedPerson))
+              setSuccess(true);
               setNotificationMessage(`${newName} was added to the phonebook :)`)
               setNewNumber("")
               setNewName("")
@@ -117,7 +126,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notificationMessage} />
+      <Notification success = {success} message={notificationMessage} />
       <Filter onChange={handleFilterChange}/>
       <h2>add a new</h2>
       <AddPersonForm 
