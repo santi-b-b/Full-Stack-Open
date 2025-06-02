@@ -8,7 +8,7 @@ const CountryDetails = ({showDetail, country}) => {
 
     return (
         <div>
-            <h1>{country.name.official}</h1>
+            <h1>{country.name.common}</h1>
             <div>Capital {country.capital}</div>
             <div>Area {country.area}</div>
             <h2>Languages</h2>

@@ -7,7 +7,7 @@ const CountriesList = ({countriesToShow, showList}) => {
     return (
             <ul>
                 {countriesToShow.map(country => 
-                    <li key = {country.cca3}> {country.name.official} </li>
+                    <li key = {country.cca3}> {country.name.common} </li>
                 )}
             </ul>
     )
