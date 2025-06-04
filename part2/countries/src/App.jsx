@@ -61,13 +61,18 @@ const App = () => {
       setNotificationMessage('')
     }
   }
+  
+  const handleClickDetails = (countryName) => {
+    const event = { target: { value: countryName } };
+    handleFilterChange(event);
+  }
 
 
   return (
     <div>
-      <Filter onChange={handleFilterChange}/>
+      <Filter value = {filter} onChange={handleFilterChange}/>
       <>{notificationMessage}</>
-      <CountriesList countriesToShow={countriesToShow} showList={showList}/>
+      <CountriesList countriesToShow={countriesToShow} showList={showList} handleClickDetails={handleClickDetails}/>
       <CountryDetails showDetail={showDetail}  country = {country}/>
     </div>
     
