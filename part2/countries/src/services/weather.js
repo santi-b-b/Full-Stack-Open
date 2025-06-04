@@ -1,13 +1,10 @@
 import axios from 'axios'
-const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/api/'
+const baseUrl = 'https://api.openweathermap.org/data/2.5/weather?q='
+const apiKey = import.meta.env.VITE_WEATHER_API_KEY
 
-
-const getAll = () => {
-  const request = axios.get(baseUrl.concat('all'))
-  return request.then(
-    response => 
-      response.data
-  )
+const get = (capital) => {
+  const request = axios.get(`${baseUrl}${capital}&appid=${apiKey}&units=metric`)
+  return request.then(response =>response.data)
 }
 
 const create = newObject => {
@@ -25,4 +22,4 @@ const remove = id => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update, remove }
+export default { get, create, update, remove }

@@ -30,7 +30,6 @@ const App = () => {
     const filtered = countries.filter(country => country.name.common.toLowerCase().includes(filterValue.toLowerCase()))
     setFilter(filterValue)
     setCountriesToShow(filtered)
-    console.log(filtered)
 
     if(filterValue.length === 0 )
     {
@@ -61,7 +60,7 @@ const App = () => {
       setNotificationMessage('')
     }
   }
-  
+
   const handleClickDetails = (countryName) => {
     const event = { target: { value: countryName } };
     handleFilterChange(event);
